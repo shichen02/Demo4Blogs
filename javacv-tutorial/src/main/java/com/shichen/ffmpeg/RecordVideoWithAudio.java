@@ -31,10 +31,10 @@ public class RecordVideoWithAudio {
      *
      * @param webcamDeviceIndex - 视频设备，本机默认是0
      * @param audioDeviceIndex  - 音频设备，本机默认是4
-     * @param outputPath          - 输出文件/地址(可以是本地文件，也可以是流媒体服务器地址)
-     * @param captureWidth        - 摄像头宽
-     * @param captureHeight       - 摄像头高
-     * @param frameRate          - 视频帧率:最低 25(即每秒25张图片,低于25就会出现闪屏)
+     * @param outputPath        - 输出文件/地址(可以是本地文件，也可以是流媒体服务器地址)
+     * @param captureWidth      - 摄像头宽
+     * @param captureHeight     - 摄像头高
+     * @param frameRate         - 视频帧率:最低 25(即每秒25张图片,低于25就会出现闪屏)
      * @throws Exception 异常
      * @author tangsc
      * @date 2022/08/03
@@ -153,10 +153,11 @@ public class RecordVideoWithAudio {
         recorder.setAudioChannels(2);
         // 音频编/解码器
         recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
-        log.info("开始录制...");
+
 
         try {
             recorder.start();
+            log.info("开始录制...");
         } catch (org.bytedeco.javacv.FrameRecorder.Exception e2) {
             if (recorder != null) {
                 log.info("关闭失败，尝试重启");
@@ -176,82 +177,82 @@ public class RecordVideoWithAudio {
 
         }
         // 音频捕获
-        new Thread(new Runnable() {
 
-            public void run() {
-                /**
-                 * 设置音频编码器 最好是系统支持的格式，否则getLine() 会发生错误
-                 * 采样率:44.1k;采样率位数:16位;立体声(stereo);是否签名;true:
-                 * big-endian字节顺序,false:little-endian字节顺序(详见:ByteOrder类)
-                 */
-                AudioFormat audioFormat = new AudioFormat(44100.0F, 16, 2, true, false);
 
-                // 通过AudioSystem获取本地音频混合器信息
-                Mixer.Info[] minfoSet = AudioSystem.getMixerInfo();
-                // 通过AudioSystem获取本地音频混合器
-                Mixer mixer = AudioSystem.getMixer(minfoSet[audioDeviceIndex]);
-                // 通过设置好的音频编解码器获取数据线信息
-                DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
-                try {
-                    // 打开并开始捕获音频
-                    // 通过line可以获得更多控制权
-                    // 获取设备：TargetDataLine line
-                    // =(TargetDataLine)mixer.getLine(dataLineInfo);
-                    final TargetDataLine line = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
-                    line.open(audioFormat);
-                    line.start();
-                    // 获得当前音频采样率
-                    final int sampleRate = (int) audioFormat.getSampleRate();
-                    // 获取当前音频通道数量
-                    final int numChannels = audioFormat.getChannels();
-                    // 初始化音频缓冲区(size是音频采样率*通道数)
-                    int audioBufferSize = sampleRate * numChannels;
-                    final byte[] audioBytes = new byte[audioBufferSize];
+        /**
+         * 设置音频编码器 最好是系统支持的格式，否则getLine() 会发生错误
+         * 采样率:44.1k;采样率位数:16位;立体声(stereo);是否签名;true:
+         * big-endian字节顺序,false:little-endian字节顺序(详见:ByteOrder类)
+         */
+        AudioFormat audioFormat = new AudioFormat(44100.0F, 16, 2, true, false);
 
-                    ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-                    exec.scheduleAtFixedRate(new Runnable() {
+        // 通过AudioSystem获取本地音频混合器信息
+        Mixer.Info[] minfoSet = AudioSystem.getMixerInfo();
+        // 通过AudioSystem获取本地音频混合器
+        Mixer mixer = AudioSystem.getMixer(minfoSet[audioDeviceIndex]);
+        // 通过设置好的音频编解码器获取数据线信息
+        DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+        // 定时任务
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+        try {
+            // 打开并开始捕获音频
+            // 通过line可以获得更多控制权
+            // 获取设备：TargetDataLine line
+            // =(TargetDataLine)mixer.getLine(dataLineInfo);
+            final TargetDataLine line = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
+            line.open(audioFormat);
+            line.start();
+            // 获得当前音频采样率
+            final int sampleRate = (int) audioFormat.getSampleRate();
+            // 获取当前音频通道数量
+            final int numChannels = audioFormat.getChannels();
+            // 初始化音频缓冲区(size是音频采样率*通道数)
+            int audioBufferSize = sampleRate * numChannels;
+            final byte[] audioBytes = new byte[audioBufferSize];
 
-                        public void run() {
-                            try {
-                                // 非阻塞方式读取
-                                int nBytesRead = line.read(audioBytes, 0, line.available());
-                                // 因为我们设置的是16位音频格式,所以需要将byte[]转成short[]
-                                int nSamplesRead = nBytesRead / 2;
-                                short[] samples = new short[nSamplesRead];
-                                /**
-                                 * ByteBuffer.wrap(audioBytes)-将byte[]数组包装到缓冲区
-                                 * ByteBuffer.order(ByteOrder)-按little-endian修改字节顺序，解码器定义的
-                                 * ByteBuffer.asShortBuffer()-创建一个新的short[]缓冲区
-                                 * ShortBuffer.get(samples)-将缓冲区里short数据传输到short[]
-                                 */
-                                ByteBuffer.wrap(audioBytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(samples);
-                                // 将short[]包装到ShortBuffer
-                                ShortBuffer sBuff = ShortBuffer.wrap(samples, 0, nSamplesRead);
-                                // 按通道录制shortBuffer
-                                recorder.recordSamples(sampleRate, numChannels, sBuff);
-                            } catch (org.bytedeco.javacv.FrameRecorder.Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, 0, (long) 1000 / frameRate, TimeUnit.MILLISECONDS);
-                } catch (LineUnavailableException e1) {
-                    e1.printStackTrace();
+            exec.scheduleAtFixedRate(new Runnable() {
+
+                public void run() {
+                    try {
+                        // 非阻塞方式读取
+                        int nBytesRead = line.read(audioBytes, 0, line.available());
+                        // 因为我们设置的是16位音频格式,所以需要将byte[]转成short[]
+                        int nSamplesRead = nBytesRead / 2;
+                        short[] samples = new short[nSamplesRead];
+                        /**
+                         * ByteBuffer.wrap(audioBytes)-将byte[]数组包装到缓冲区
+                         * ByteBuffer.order(ByteOrder)-按little-endian修改字节顺序，解码器定义的
+                         * ByteBuffer.asShortBuffer()-创建一个新的short[]缓冲区
+                         * ShortBuffer.get(samples)-将缓冲区里short数据传输到short[]
+                         */
+                        ByteBuffer.wrap(audioBytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(samples);
+                        // 将short[]包装到ShortBuffer
+                        ShortBuffer sBuff = ShortBuffer.wrap(samples, 0, nSamplesRead);
+                        // 按通道录制shortBuffer
+                        recorder.recordSamples(sampleRate, numChannels, sBuff);
+                    } catch (org.bytedeco.javacv.FrameRecorder.Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }).start();
+            }, 0, (long) 1000 / frameRate, TimeUnit.MILLISECONDS);
+        } catch (LineUnavailableException e1) {
+            e1.printStackTrace();
+        }
+
 
         // javaCV提供了优化非常好的硬件加速组件来帮助显示我们抓取的摄像头视频
         CanvasFrame cFrame = new CanvasFrame("Capture Preview", CanvasFrame.getDefaultGamma() / grabber.getGamma());
         Frame capturedFrame = null;
         // 执行抓取（capture）过程
-        while ((capturedFrame = grabber.grab()) != null && cFrame.isDisplayable()) {
+        while (((capturedFrame = grabber.grab()) != null) && (cFrame.isShowing())) {
             if (cFrame.isVisible()) {
                 //本机预览要发送的帧
                 cFrame.showImage(capturedFrame);
             }
             //定义我们的开始时间，当开始时需要先初始化时间戳
-            if (startTime == 0)
+            if (startTime == 0) {
                 startTime = System.currentTimeMillis();
+            }
 
             // 创建一个 timestamp用来写入帧中
             videoTS = 1000 * (System.currentTimeMillis() - startTime);
@@ -273,6 +274,8 @@ public class RecordVideoWithAudio {
         cFrame.dispose();
         try {
             if (recorder != null) {
+                exec.shutdown();
+                log.info("关闭音频采集");
                 recorder.stop();
                 log.info("关闭摄像头");
             }
