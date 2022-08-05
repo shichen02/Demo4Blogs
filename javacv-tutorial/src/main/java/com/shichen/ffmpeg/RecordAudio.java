@@ -74,7 +74,7 @@ public class RecordAudio extends Thread {
             System.out.println("开始播放.....");
             FileInputStream fis = new FileInputStream(file);
             AudioFormat.Encoding encoding =  new AudioFormat.Encoding("PCM_SIGNED");
-            //编码格式，采样率，每个样本的位数，声道，帧长（字节），帧数，是否按big-endian字节顺序存储
+            //编码格式，采样率，每个样本的位数，声道，帧长（字节），帧数，是否按 big-endian 字节顺序存储
             AudioFormat format = new AudioFormat(encoding,44100, 16, 2, 4, 44100 ,false);
             SourceDataLine auline = null;
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
