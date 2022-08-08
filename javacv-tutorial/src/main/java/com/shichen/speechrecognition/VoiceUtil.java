@@ -23,11 +23,31 @@ import org.vosk.LogLevel;
 import org.vosk.Model;
 import org.vosk.Recognizer;
 
+/**
+ *  自动语音识别（Automatic Speech Recognition，ASR)
+ *
+ * @author tangsc
+ * @date 2022/08/08
+ */
 @Slf4j
 public class VoiceUtil {
 
+    /**
+     * vosk repository https://github.com/alphacep/vosk-api
+     * vosk website    https://alphacephei.com/vosk/models
+     */
     private String VOSKMODELPATH = "E:\\code\\cvtest\\modules\\vosk-model-small-cn-0.22";
 
+    /**
+     * 得到消息
+     *
+     * @param filePath 文件路径
+     * @return {@link String }
+     * @throws IOException                   ioexception
+     * @throws UnsupportedAudioFileException 不支持音频文件异常
+     * @author tangsc
+     * @date 2022/08/08
+     */
     public String getWord(String filePath) throws IOException, UnsupportedAudioFileException {
         if (Objects.isNull(VOSKMODELPATH)) {
             throw new RuntimeException("无效的VOS模块！");
