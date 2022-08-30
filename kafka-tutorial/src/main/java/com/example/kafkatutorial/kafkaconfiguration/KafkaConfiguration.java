@@ -1,4 +1,4 @@
-package com.example.kafkatutorial.configuration;
+package com.example.kafkatutorial.kafkaconfiguration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;

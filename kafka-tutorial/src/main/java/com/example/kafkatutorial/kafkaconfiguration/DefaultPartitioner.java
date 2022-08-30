@@ -1,4 +1,4 @@
-package com.example.kafkatutorial.configuration;
+package com.example.kafkatutorial.kafkaconfiguration;
 
 import java.util.List;
 import java.util.Map;

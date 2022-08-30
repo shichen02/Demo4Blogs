@@ -1,4 +1,4 @@
-package com.example.kafkatutorial.configuration;
+package com.example.kafkatutorial.kafkaconfiguration;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
