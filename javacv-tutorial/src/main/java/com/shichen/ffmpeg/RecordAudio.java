@@ -105,13 +105,14 @@ public class RecordAudio extends Thread {
     }
 
     public static void main(String[] args) {
-        RecordAudio thread = new RecordAudio("G:\\test\\voice_ai\\123.wav");
-        thread.start();
-        long endTime = System.currentTimeMillis() + 1000 * 5l;
-        while (System.currentTimeMillis() < endTime){
-
-        }
-        thread.stopRecording();
+//        RecordAudio thread = new RecordAudio("G:\\test\\voice_ai\\123.wav");
+//        thread.start();
+//        long endTime = System.currentTimeMillis() + 1000 * 5l;
+//        while (System.currentTimeMillis() < endTime){
+//
+//        }
+//        thread.stopRecording();
+        new RecordAudio("G:\\test\\voice_ai\\123.wav").play("G:\\test\\voice_ai\\1_4_2.wav");
     }
 }
 
