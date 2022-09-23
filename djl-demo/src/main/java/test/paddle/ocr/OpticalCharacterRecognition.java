@@ -16,6 +16,8 @@ import ai.djl.translate.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,7 +50,9 @@ public class OpticalCharacterRecognition {
         TranslateException {
         // 载入图片
         String url = "https://resources.djl.ai/images/flight_ticket.jpg";
-        Image img = ImageFactory.getInstance().fromUrl(url);
+//        Image img = ImageFactory.getInstance().fromUrl(url);
+        Path path = Paths.get("G:\\test\\test.jpg");
+        Image img = ImageFactory.getInstance().fromFile(path);
         img.getWrappedImage();
 
         // 进行文字框选检测

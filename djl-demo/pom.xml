@@ -22,7 +22,7 @@
             <artifactId>api</artifactId>
             <version>0.18.0</version>
         </dependency>
-<!--        paddle 相关依赖-->
+        <!--        paddle 相关依赖-->
         <dependency>
             <groupId>ai.djl.paddlepaddle</groupId>
             <artifactId>paddlepaddle-engine</artifactId>
@@ -33,12 +33,80 @@
             <artifactId>paddlepaddle-model-zoo</artifactId>
             <version>0.18.0</version>
         </dependency>
-<!-- 由于在 DJL 中 paddle-Engine 没有操作 NDArray 相关的 API 所有这里导入 pytorch-engine 辅助-->
+        <!-- 由于在 DJL 中 paddle-Engine 没有操作 NDArray 相关的 API 所有这里导入 pytorch-engine 辅助-->
         <dependency>
             <groupId>ai.djl.pytorch</groupId>
             <artifactId>pytorch-engine</artifactId>
             <version>0.18.0</version>
         </dependency>
+        <dependency>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-model-zoo</artifactId>
+            <version>0.18.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ai.djl</groupId>
+            <artifactId>basicdataset</artifactId>
+            <version>0.18.0</version>
+        </dependency>
+
+        <!-- javacv 用其中音频处理器 ffmpeg-->
+        <!--        Java 视觉平台-->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5.7</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+
+        <!--python 中的 librosa 用于音频处理-->
+        <dependency>
+            <groupId>jlibrosa</groupId>
+            <artifactId>jlibrosa</artifactId>
+            <version>1.1.8-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jlibrosa-1.1.8-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <!-- 离散傅里叶变换-->
+        <dependency>
+            <groupId>com.github.wendykierp</groupId>
+            <artifactId>JTransforms</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <!-- 用于处理多维数组-->
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native</artifactId>
+            <version>1.0.0-M1.1</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.nd4j</groupId>-->
+<!--            <artifactId>nd4j-native-platform</artifactId>-->
+<!--            <version>1.0.0-M1.1</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.nd4j</groupId>-->
+<!--            <artifactId>nd4j-native</artifactId>-->
+<!--            <version>1.0.0-M1.1</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${project.basedir}/lib/nd4j-native-1.0.0-M1.1.jar</systemPath>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>science.aist.imaging</groupId>-->
+<!--            <artifactId>nd4j</artifactId>-->
+<!--            <version>2.0.0</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
