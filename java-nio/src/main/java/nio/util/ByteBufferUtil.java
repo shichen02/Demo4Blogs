@@ -1,4 +1,4 @@
-package nio;
+package nio.util;
 
 
 import static io.netty.util.internal.MathUtil.isOutOfBounds;
