@@ -37,33 +37,36 @@ public class ByteToMessageCoder extends ByteToMessageCodec<Message> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-
-
-        while (true) {
-            if (in.readableBytes() < 5) {
-                break;
-            }
-            in.markReaderIndex();
-            // 一个字节 head 0XFE
-            short head = in.readUnsignedByte();
-            if (DIVISION == head){
-                // 两个字节 len
-                int len = in.readUnsignedShort() + 1;
-                // 一个字节 mode
-                short mode = in.readUnsignedByte();
-                if (in.readableBytes() < len) {
-                    in.resetReaderIndex();
-                    break;
-                }
-
-                String body = in.readCharSequence(len - 1, StandardCharsets.UTF_8).toString();
-                out.add(body);
-
-                // 最后一个字节 end 0XFE
-                short i = in.readUnsignedByte();
-            }
-
+        System.out.println("解码");
+        while (in.isReadable()){
+            in.readByte();
         }
+        out.add("hello");
+//        while (true) {
+//            if (in.readableBytes() < 5) {
+//                break;
+//            }
+//            in.markReaderIndex();
+//            // 一个字节 head 0XFE
+//            short head = in.readUnsignedByte();
+//            if (DIVISION == head){
+//                // 两个字节 len
+//                int len = in.readUnsignedShort() + 1;
+//                // 一个字节 mode
+//                short mode = in.readUnsignedByte();
+//                if (in.readableBytes() < len) {
+//                    in.resetReaderIndex();
+//                    break;
+//                }
+//
+//                String body = in.readCharSequence(len - 1, StandardCharsets.UTF_8).toString();
+//                out.add(body);
+//
+//                // 最后一个字节 end 0XFE
+//                short i = in.readUnsignedByte();
+//            }
+//
+//        }
 
     }
 

@@ -6,6 +6,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import nettytest.message.Message;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -18,9 +19,9 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
         System.out.println(msg);
 
         // 处理业务逻辑
-        if (!"heartBeat".equals(msg)){
-            return;
-        }
+//        if (!"heartBeat".equals(msg)){
+//            return;
+//        }
         HashMap<String, Object> map = new HashMap<>();
         map.put("method", "tts");
 
@@ -33,9 +34,15 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
         json.putAll(map);
 
         byte[] bytes = json.toString().getBytes(StandardCharsets.UTF_8);
+
         ByteBuf buffer = ctx.alloc().buffer(bytes.length);
         buffer.writeBytes(bytes);
-        ChannelFuture f = ctx.writeAndFlush(buffer);
+        Message message = new Message();
+        byte a = 0x12;
+        message.setModel(a);
+        message.setValue(a);
+        ctx.channel().write(message);
+//        ChannelFuture f = ctx.write(buffer);
 //        f.addListener(ChannelFutureListener.CLOSE);
 
 
