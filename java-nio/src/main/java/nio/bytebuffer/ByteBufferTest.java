@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class ByteBufferTest {
 
     public static void main(String[] args) {
@@ -21,7 +19,6 @@ public class ByteBufferTest {
                 buffer.flip();
                 while (buffer.hasRemaining()) {
                     byte b = buffer.get();
-                    log.debug("char: {} :{}", (char) b, b);
                 }
                 // 清空
                 buffer.clear();

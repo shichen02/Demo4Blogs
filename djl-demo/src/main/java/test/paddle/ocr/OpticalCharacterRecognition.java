@@ -13,9 +13,13 @@ import ai.djl.paddlepaddle.zoo.cv.objectdetection.PpWordDetectionTranslator;
 import ai.djl.paddlepaddle.zoo.cv.imageclassification.PpWordRotateTranslator;
 import ai.djl.paddlepaddle.zoo.cv.wordrecognition.PpWordRecognitionTranslator;
 import ai.djl.translate.*;
+import cn.hutool.core.io.file.PathUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -94,7 +98,7 @@ public class OpticalCharacterRecognition {
         if (!level.equals("debug")) {
             return;
         }
-        File file = new File("/Users/tangsc/Pictures" + fileName + ".png");
+        File file = new File("D:\\Develop\\test\\" + fileName + ".png");
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         sample.save(fileOutputStream, "png");
     }
@@ -111,15 +115,33 @@ public class OpticalCharacterRecognition {
      * @author tangsc
      * @date 2022/09/12
      */
+//    private DetectedObjects getDetectedObjects(Image img)
+//        throws IOException, ModelNotFoundException, MalformedModelException, TranslateException {
+//        if (Objects.isNull(detector)) {
+//            Criteria<Image, DetectedObjects> criteria1 = Criteria.builder()
+//                .optEngine("PaddlePaddle")
+//                .setTypes(Image.class, DetectedObjects.class)
+//                .optModelUrls("https://resources.djl.ai/test-models/paddleOCR/mobile/det_db.zip")
+//                .optTranslator(new PpWordDetectionTranslator(new ConcurrentHashMap<String, String>()))
+//                .build();
+//
+//            ZooModel<Image, DetectedObjects> detectionModel = criteria1.loadModel();
+//            detector = detectionModel.newPredictor();
+//        }
+//
+//        return detector.predict(img);
+//    }
+
     private DetectedObjects getDetectedObjects(Image img)
-        throws IOException, ModelNotFoundException, MalformedModelException, TranslateException {
+            throws IOException, ModelNotFoundException, MalformedModelException, TranslateException {
         if (Objects.isNull(detector)) {
             Criteria<Image, DetectedObjects> criteria1 = Criteria.builder()
-                .optEngine("PaddlePaddle")
-                .setTypes(Image.class, DetectedObjects.class)
-                .optModelUrls("https://resources.djl.ai/test-models/paddleOCR/mobile/det_db.zip")
-                .optTranslator(new PpWordDetectionTranslator(new ConcurrentHashMap<String, String>()))
-                .build();
+                    .setTypes(Image.class, DetectedObjects.class)
+                    .optEngine("OnnxRuntime")
+                    .optModelPath(Paths.get("D:/Develop/Code/Demo4Blogs/djl-demo/src/main/resources"))
+                    .optModelName("model/sim_best")
+                    .optTranslator(new PpWordDetectionTranslator(new ConcurrentHashMap<String, String>()))
+                    .build();
 
             ZooModel<Image, DetectedObjects> detectionModel = criteria1.loadModel();
             detector = detectionModel.newPredictor();
