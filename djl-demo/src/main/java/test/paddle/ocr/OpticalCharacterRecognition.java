@@ -50,9 +50,9 @@ public class OpticalCharacterRecognition {
         TranslateException {
         // 载入图片
         String url = "https://resources.djl.ai/images/flight_ticket.jpg";
-//        Image img = ImageFactory.getInstance().fromUrl(url);
-        Path path = Paths.get("G:\\test\\test.jpg");
-        Image img = ImageFactory.getInstance().fromFile(path);
+        Image img = ImageFactory.getInstance().fromUrl(url);
+//        Path path = Paths.get("/Users/tangsc/Pictures/test.png");
+//        Image img = ImageFactory.getInstance().fromFile(path);
         img.getWrappedImage();
 
         // 进行文字框选检测
@@ -94,7 +94,7 @@ public class OpticalCharacterRecognition {
         if (!level.equals("debug")) {
             return;
         }
-        File file = new File("G:\\test\\ai-test\\" + fileName + ".png");
+        File file = new File("/Users/tangsc/Pictures" + fileName + ".png");
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         sample.save(fileOutputStream, "png");
     }

@@ -70,43 +70,8 @@
             <version>3.4</version>
         </dependency>
 
-        <!--python 中的 librosa 用于音频处理-->
-        <dependency>
-            <groupId>jlibrosa</groupId>
-            <artifactId>jlibrosa</artifactId>
-            <version>1.1.8-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/jlibrosa-1.1.8-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <!-- 离散傅里叶变换-->
-        <dependency>
-            <groupId>com.github.wendykierp</groupId>
-            <artifactId>JTransforms</artifactId>
-            <version>3.1</version>
-        </dependency>
-        <!-- 用于处理多维数组-->
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native</artifactId>
-            <version>1.0.0-M1.1</version>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.nd4j</groupId>-->
-<!--            <artifactId>nd4j-native-platform</artifactId>-->
-<!--            <version>1.0.0-M1.1</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.nd4j</groupId>-->
-<!--            <artifactId>nd4j-native</artifactId>-->
-<!--            <version>1.0.0-M1.1</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/lib/nd4j-native-1.0.0-M1.1.jar</systemPath>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>science.aist.imaging</groupId>-->
-<!--            <artifactId>nd4j</artifactId>-->
-<!--            <version>2.0.0</version>-->
-<!--        </dependency>-->
+
+
 
     </dependencies>
 
