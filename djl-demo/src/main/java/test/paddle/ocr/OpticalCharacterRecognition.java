@@ -6,6 +6,9 @@ import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.*;
+import ai.djl.modality.cv.translator.SingleShotDetectionTranslator;
+import ai.djl.modality.cv.translator.YoloTranslator;
+import ai.djl.modality.cv.translator.YoloV5Translator;
 import ai.djl.modality.cv.util.NDImageUtils;
 import ai.djl.ndarray.*;
 import ai.djl.repository.zoo.*;
@@ -53,10 +56,10 @@ public class OpticalCharacterRecognition {
     public void testOcr() throws IOException, ModelNotFoundException, MalformedModelException,
         TranslateException {
         // 载入图片
-        String url = "https://resources.djl.ai/images/flight_ticket.jpg";
-        Image img = ImageFactory.getInstance().fromUrl(url);
-//        Path path = Paths.get("/Users/tangsc/Pictures/test.png");
-//        Image img = ImageFactory.getInstance().fromFile(path);
+//        String url = "https://resources.djl.ai/images/flight_ticket.jpg";
+//        Image img = ImageFactory.getInstance().fromUrl(url);
+        Path path = Paths.get("D:\\Develop\\Code\\Demo4Blogs\\djl-demo\\src\\main\\resources\\image\\IMG (3).jpg");
+        Image img = ImageFactory.getInstance().fromFile(path);
         img.getWrappedImage();
 
         // 进行文字框选检测
@@ -135,12 +138,24 @@ public class OpticalCharacterRecognition {
     private DetectedObjects getDetectedObjects(Image img)
             throws IOException, ModelNotFoundException, MalformedModelException, TranslateException {
         if (Objects.isNull(detector)) {
+
+            ConcurrentHashMap<String, Object> map = new ConcurrentHashMap<>();
+
+            map.put("width", 640);
+            map.put("height", 640);
+            map.put("resize", "true");
+            map.put("outputType", "BOX");
+//            map.put("threshold", 0.4f);
+//            map.put("normalize", "true");
+            YoloV5Translator translator = YoloV5Translator.builder(map).build();
+
             Criteria<Image, DetectedObjects> criteria1 = Criteria.builder()
                     .setTypes(Image.class, DetectedObjects.class)
                     .optEngine("OnnxRuntime")
-                    .optModelPath(Paths.get("D:/Develop/Code/Demo4Blogs/djl-demo/src/main/resources"))
-                    .optModelName("model/sim_best")
-                    .optTranslator(new PpWordDetectionTranslator(new ConcurrentHashMap<String, String>()))
+                    .optApplication(Application.of("cv/object_detection"))
+                    .optModelPath(Paths.get("D:\\Develop\\Code\\Demo4Blogs\\djl-demo\\src\\main\\resources\\model\\sim_best.onnx"))
+//                    .optModelName("model/sim_best")
+                    .optTranslator(translator)
                     .build();
 
             ZooModel<Image, DetectedObjects> detectionModel = criteria1.loadModel();
