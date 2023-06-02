@@ -115,33 +115,15 @@ public class OpticalCharacterRecognition {
      * @author tangsc
      * @date 2022/09/12
      */
-//    private DetectedObjects getDetectedObjects(Image img)
-//        throws IOException, ModelNotFoundException, MalformedModelException, TranslateException {
-//        if (Objects.isNull(detector)) {
-//            Criteria<Image, DetectedObjects> criteria1 = Criteria.builder()
-//                .optEngine("PaddlePaddle")
-//                .setTypes(Image.class, DetectedObjects.class)
-//                .optModelUrls("https://resources.djl.ai/test-models/paddleOCR/mobile/det_db.zip")
-//                .optTranslator(new PpWordDetectionTranslator(new ConcurrentHashMap<String, String>()))
-//                .build();
-//
-//            ZooModel<Image, DetectedObjects> detectionModel = criteria1.loadModel();
-//            detector = detectionModel.newPredictor();
-//        }
-//
-//        return detector.predict(img);
-//    }
-
     private DetectedObjects getDetectedObjects(Image img)
-            throws IOException, ModelNotFoundException, MalformedModelException, TranslateException {
+        throws IOException, ModelNotFoundException, MalformedModelException, TranslateException {
         if (Objects.isNull(detector)) {
             Criteria<Image, DetectedObjects> criteria1 = Criteria.builder()
-                    .setTypes(Image.class, DetectedObjects.class)
-                    .optEngine("OnnxRuntime")
-                    .optModelPath(Paths.get("D:/Develop/Code/Demo4Blogs/djl-demo/src/main/resources"))
-                    .optModelName("model/sim_best")
-                    .optTranslator(new PpWordDetectionTranslator(new ConcurrentHashMap<String, String>()))
-                    .build();
+                .optEngine("PaddlePaddle")
+                .setTypes(Image.class, DetectedObjects.class)
+                .optModelUrls("https://resources.djl.ai/test-models/paddleOCR/mobile/det_db.zip")
+                .optTranslator(new PpWordDetectionTranslator(new ConcurrentHashMap<String, String>()))
+                .build();
 
             ZooModel<Image, DetectedObjects> detectionModel = criteria1.loadModel();
             detector = detectionModel.newPredictor();
@@ -149,6 +131,24 @@ public class OpticalCharacterRecognition {
 
         return detector.predict(img);
     }
+
+//    private DetectedObjects getDetectedObjects(Image img)
+//            throws IOException, ModelNotFoundException, MalformedModelException, TranslateException {
+//        if (Objects.isNull(detector)) {
+//            Criteria<Image, DetectedObjects> criteria1 = Criteria.builder()
+//                    .setTypes(Image.class, DetectedObjects.class)
+//                    .optEngine("OnnxRuntime")
+//                    .optModelPath(Paths.get("D:/Develop/Code/Demo4Blogs/djl-demo/src/main/resources"))
+//                    .optModelName("model/sim_best")
+//                    .optTranslator(new PpWordDetectionTranslator(new ConcurrentHashMap<String, String>()))
+//                    .build();
+//
+//            ZooModel<Image, DetectedObjects> detectionModel = criteria1.loadModel();
+//            detector = detectionModel.newPredictor();
+//        }
+//
+//        return detector.predict(img);
+//    }
 
     /**
      * 用于确认图片以及文字是否需要旋转
